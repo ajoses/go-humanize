@@ -44,7 +44,18 @@ func TestCommafWithDigits(t *testing.T) {
 		{"1.23, 3", CommafWithDigits(1.23, 3), "1.23"},
 	}.validate(t)
 }
-
+func TestCommafWithPrecision(t *testing.T) {
+	testList{
+		{"1.23, 0", CommafWithPrecision(1.23, 0), "1"},
+		{"1.23, 1", CommafWithPrecision(1.23, 1), "1.2"},
+		{"1.23, 2", CommafWithPrecision(1.23, 2), "1.23"},
+		{"1.23, 3", CommafWithPrecision(1.23, 3), "1.230"},
+		{"1.23, 3", CommafWithPrecision(1.23, 3), "1.230"},
+		{"1.2, 3", CommafWithPrecision(1.2, 3), "1.200"},
+		{"1.2, 2", CommafWithPrecision(1.2, 2), "1.20"},
+		{"1, 2", CommafWithPrecision(1, 2), "1.00"},
+	}.validate(t)
+}
 func TestCommafs(t *testing.T) {
 	testList{
 		{"0", Commaf(0), "0"},
