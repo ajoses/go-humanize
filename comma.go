@@ -76,6 +76,41 @@ func Commaf(v float64) string {
 	return buf.String()
 }
 
+// Commaf produces a string form of the given number in base 10 with
+// commas after every three orders of magnitude.
+//	Also you can specify the precision of the number
+//
+// e.g. CommafWitPrecision(834142.32, 2) -> 834,142.32
+// e.g. CommafWitPrecision(834142.32, 3) -> 834,142.320
+func CommafWithPrecision(v float64, prec int) string {
+	buf := &bytes.Buffer{}
+	if v < 0 {
+		buf.Write([]byte{'-'})
+		v = 0 - v
+	}
+
+	comma := []byte{','}
+
+	parts := strings.Split(strconv.FormatFloat(v, 'f', prec, 64), ".")
+	pos := 0
+	if len(parts[0])%3 != 0 {
+		pos += len(parts[0]) % 3
+		buf.WriteString(parts[0][:pos])
+		buf.Write(comma)
+	}
+	for ; pos < len(parts[0]); pos += 3 {
+		buf.WriteString(parts[0][pos : pos+3])
+		buf.Write(comma)
+	}
+	buf.Truncate(buf.Len() - 1)
+
+	if len(parts) > 1 {
+		buf.Write([]byte{'.'})
+		buf.WriteString(parts[1])
+	}
+	return buf.String()
+}
+
 // CommafWithDigits works like the Commaf but limits the resulting
 // string to the given number of decimal places.
 //
